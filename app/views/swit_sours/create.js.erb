@@ -1,0 +1,10 @@
+$('a.sweets.'+<%= @swit_sour.swit_id %>).text(<%= SwitSour.where(:rating => 0, :swit_id => @swit_sour.swit_id).count.to_s %> + " Sweets");
+$('a.sours.'+<%= @swit_sour.swit_id %>).text(<%= SwitSour.where(:rating => 1, :swit_id => @swit_sour.swit_id).count.to_s %> + " Sours");
+
+if("<%= @swit_sour.rating %>" == "sweet") {
+  $('.sweet-btn.'+<%= @swit_sour.swit_id %>).attr('class','btn btn-success btn-xs sweet-btn <%= @swit_sour.swit_id%>');
+  $('.sour-btn.'+<%= @swit_sour.swit_id %>).attr('class','btn btn-default btn-xs sour-btn <%= @swit_sour.swit_id%>')
+} else {
+  $('.sweet-btn.'+<%= @swit_sour.swit_id %>).attr('class','btn btn-default btn-xs sweet-btn <%= @swit_sour.swit_id%>');
+  $('.sour-btn.'+<%= @swit_sour.swit_id %>).attr('class','btn btn-warning btn-xs sour-btn <%= @swit_sour.swit_id%>')
+}

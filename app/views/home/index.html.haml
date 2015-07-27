@@ -1,0 +1,25 @@
+%div.nav
+	%a{href: "/logout"}
+		Logout
+	%a{href: ""}
+%h1
+	Welcome
+	= @current_user.username + "!"
+
+= form_for @swit, remote: true, :id => "new_swit" do |f|
+	- if @swit.errors.any?
+		#error_explanation
+			%h2= "#{pluralize(@swit.errors.count, "error")} prohibited this swit from being saved:"
+			%ul
+				- @swit.errors.full_messages.each do |msg|
+					%li= msg
+
+	.field
+		= f.text_area :content, :id => "swit-content", :placeholder => "Write swit here"
+	.actions
+		= f.submit 'Post Swit!', :id => "submit"
+
+%h3
+	Recent Swits
+%div.swits
+	= render partial: @swits

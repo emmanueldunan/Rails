@@ -1,0 +1,2 @@
+module SwitSoursHelper
+end

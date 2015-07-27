@@ -1,0 +1,13 @@
+= form_for @swit_sour do |f|
+  - if @swit_sour.errors.any?
+    #error_explanation
+      %h2= "#{pluralize(@swit_sour.errors.count, "error")} prohibited this swit_sour from being saved:"
+      %ul
+        - @swit_sour.errors.full_messages.each do |msg|
+          %li= msg
+
+  .field
+    = f.label :rating
+    = f.text_field :rating
+  .actions
+    = f.submit 'Save'

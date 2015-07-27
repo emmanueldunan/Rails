@@ -1,0 +1,23 @@
+%p#notice= notice
+%p
+  %b Username:
+  = @user.username
+
+- if session[:user_id] == @user.id
+  - @swit = Swit.new
+  = form_for @swit, remote: true, :id => "new_swit" do |f|
+    - if @swit.errors.any?
+      #error_explanation
+        %h2= "#{pluralize(@swit.errors.count, "error")} prohibited this swit from being saved:"
+        %ul
+          - @swit.errors.full_messages.each do |msg|
+            %li= msg
+
+    .field
+      = f.text_area :content, :id => "swit-content", :placeholder => "Write swit here"
+    .actions
+      = f.submit 'Post Swit!', :id => "submit"
+
+%div.swits
+- @user_swits.each do |swit|
+  = render partial: swit

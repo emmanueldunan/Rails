@@ -1,0 +1,5 @@
+var id = <%= @comment.swit_id %>;
+var ul = document.getElementById(id).getElementsByTagName('ul')[0];
+ul.innerHTML = ul.innerHTML + '<li><b><%= link_to  User.find(@comment.user_id).username + ": ", User.find(@comment.user_id) %></b> <%= @comment.content %></li>';
+var commentCount = <%= Comment.where(:swit_id => @comment.swit.id).count.to_s %>;
+$('a.comment_toggle.'+<%= @comment.swit_id %>).text(<%= Comment.where(:swit_id => @comment.swit.id).count.to_s %> + ' Comments');

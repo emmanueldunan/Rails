@@ -1,0 +1,9 @@
+%p#notice= notice
+
+%p
+  %b Comment:
+  = @destroy.comment
+
+= link_to 'Edit', edit_destroy_path(@destroy)
+\|
+= link_to 'Back', destroys_path

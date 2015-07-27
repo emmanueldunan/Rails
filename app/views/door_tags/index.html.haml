@@ -1,0 +1,21 @@
+%h1 Listing door_tags
+
+%table
+  %thead
+    %tr
+      %th Tag
+      %th
+      %th
+      %th
+
+  %tbody
+    - @door_tags.each do |door_tag|
+      %tr
+        %td= door_tag.tag
+        %td= link_to 'Show', door_tag
+        %td= link_to 'Edit', edit_door_tag_path(door_tag)
+        %td= link_to 'Destroy', door_tag, :method => :delete, :data => { :confirm => 'Are you sure?' }
+
+%br
+
+= link_to 'New Door tag', new_door_tag_path

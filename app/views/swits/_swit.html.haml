@@ -1,0 +1,58 @@
+%div.swit{:id => swit.id}
+  %b
+    Posted by
+    = link_to  swit.user.username + " ", User.find(swit.user_id)
+    = time_ago_in_words(swit.created_at) + " "
+    ago
+  <br/>
+  %p
+    = swit.content
+
+  %div.actions
+    - toggleAndId = "comment_toggle " + swit.id.to_s
+    - sweetAndId = "sweets " + swit.id.to_s
+    - sourAndId = "sours " + swit.id.to_s
+    .field
+      = hidden_field_tag :swit_id, :value => swit.id
+      = link_to Comment.where(:swit_id => swit.id).count.to_s + " Comments", "", :class => toggleAndId
+      = link_to SwitSour.where(:rating => 0, :swit_id => swit.id).count.to_s+" Sweets", swit_sours_path(:rating => "sweet", :user_id => session[:user_id], :swit_id => swit.id), :method => "post", remote: true, :class => sweetAndId
+      = link_to SwitSour.where(:rating => 1, :swit_id => swit.id).count.to_s+" Sours", swit_sours_path(:rating => "sour", :user_id => session[:user_id], :swit_id => swit.id), :method => "post", remote: true, :class => sourAndId
+
+  %div.row
+    %div.col-md-1
+      - if SwitSour.where(:user_id => session[:user_id], :swit_id => swit.id).blank? || SwitSour.where(:user_id => session[:user_id], :swit_id => swit.id).first[:rating] != 0
+        = button_to "Sweet?", swit_sours_path(:rating => "sweet", :user_id => session[:user_id], :swit_id => swit.id), :class => "btn btn-default btn-xs sweet-btn " + swit.id.to_s, :method => :post, :remote => true
+      - else
+        = button_to "Sweet!", swit_sours_path(:rating => "sweet", :user_id => session[:user_id], :swit_id => swit.id), :class => "btn btn-success btn-xs sweet-btn " + swit.id.to_s, :method => :post, :remote => true
+    %div.pull-left.col-md-1
+      - if SwitSour.where(:user_id => session[:user_id], :swit_id => swit.id).blank? || SwitSour.where(:user_id => session[:user_id], :swit_id => swit.id).first[:rating] != 1
+        = button_to "Sour?", swit_sours_path(:rating => "sour", :user_id => session[:user_id], :swit_id => swit.id), :class => "btn btn-default btn-xs sour-btn " + swit.id.to_s, :method => :post, :remote => true
+      - else
+        = button_to "Sour!", swit_sours_path(:rating => "sour", :user_id => session[:user_id], :swit_id => swit.id), :class => "btn btn-warning btn-xs sour-btn " + swit.id.to_s, :method => :post, :remote => true
+
+  - @comment = Comment.new
+  = form_for @comment, remote: true do |f|
+    - if @comment.errors.any?
+      #error_explanation
+        %h2= "#{pluralize(@comment.errors.count, "error")} prohibited this comment from being saved:"
+        %ul
+          - @comment.errors.full_messages.each do |msg|
+            %li= msg
+
+    .field
+      = f.text_field :content, :placeholder => "Write comment here"
+      = f.submit 'Comment'
+    .field
+      = f.hidden_field :swit_id,  :value => swit.id
+    .field
+      = f.hidden_field :user_id, :value => session[:user_id]
+
+    %div.swit_comments
+      %p
+        Comments:
+        %ul{:style => "list-style-type: none"}
+          - swit.comments.each do |comment|
+            %li
+              %b
+                = link_to  User.find(comment.user_id).username + ": ", User.find(comment.user_id)
+              = comment.content
